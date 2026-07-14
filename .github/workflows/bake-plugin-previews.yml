@@ -1,16 +1,16 @@
 name: bake-plugin-previews
 
-# Post-merge + nightly bake of the home gallery's plugin previews.
+# Post-merge + on-demand bake of the home gallery's plugin previews.
 #
 # Role after the pipeline rework (specs/change/20260618-plugin-preview-bake-
 # pipeline/spec.md): this workflow is the trusted UPLOADER + manifest review PR
-# writer + nightly BACKSTOP.
+# writer.
 #   - Pull requests validate the bake without secrets in
 #     bake-plugin-previews-pr.yml.
 #   - Manifest refreshes that need R2 credentials or a write-capable token happen
 #     here after merge, from trusted main code.
 #   - Fork contributions follow the same post-merge path.
-#   - Nightly re-runs catch transient bake failures and BAKE_VERSION bumps.
+#   - Manual re-runs can recover transient bake failures and BAKE_VERSION bumps.
 # When it does need to land a manifest, it opens ONE rolling review PR (it cannot
 # push to protected main directly). Until a plugin is baked the gallery falls
 # back to its live example.html iframe, so there is no gap.
@@ -21,8 +21,6 @@ on:
     paths:
       - 'plugins/_official/**'
       - 'scripts/bake-plugin-previews.mjs'
-  schedule:
-    - cron: '0 18 * * *' # nightly self-healing full sweep
   workflow_dispatch: {}
 
 permissions:
